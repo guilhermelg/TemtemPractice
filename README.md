@@ -2738,7 +2738,7 @@ sns.barplot(x=df_avg_temtem_type['Type'], y=df_avg_temtem_type['Avg_weight_kg'])
 
 
     
-![png](Temtem_Infos_files/Temtem_Infos_40_1.png)
+![png](Temtem_Infos_40_1.png)
     
 
 
