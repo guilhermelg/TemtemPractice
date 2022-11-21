@@ -2267,4 +2267,776 @@ teste_tabela_csv
 
 
 
+
+```python
+# Aplicando uma função para encontrar os valores médios de cada tipo
+df_temtem_com_indice['type 1'].unique()
+```
+
+
+
+
+    array(['Digital', 'Water', 'Nature', 'Neutral', 'Toxic', 'Melee', 'Wind',
+           'Electric', 'Earth', 'Mental', 'Fire', 'Crystal'], dtype=object)
+
+
+
+
+```python
+df_avg_temtem_type = pd.DataFrame(data=df_temtem_com_indice['type 1'].unique(), columns=['Type'])
+```
+
+
+```python
+df_avg_temtem_type
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Digital</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Water</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Nature</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Neutral</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Toxic</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Melee</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Wind</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Electric</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Earth</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Mental</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Fire</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Crystal</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+np.average(df_temtem_com_indice[(df_temtem_com_indice['type 1'] == 'Electric') | (df_temtem_com_indice['type 2'] == 'Electric')]['atk'])
+```
+
+
+
+
+    62.4
+
+
+
+
+```python
+df_avg_temtem_type['Avg_atk'] = [0] * len(df_avg_temtem_type)
+for type_of_temtem in df_avg_temtem_type['Type']:
+    df_avg_temtem_type.loc[df_avg_temtem_type['Type'] == type_of_temtem, 'Avg_atk'] = np.average(df_temtem_com_indice[(df_temtem_com_indice['type 1'] == type_of_temtem) | (df_temtem_com_indice['type 2'] == type_of_temtem)]['atk'])
+```
+
+
+```python
+df_avg_temtem_type
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+      <th>Avg_atk</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Digital</td>
+      <td>55.380952</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Water</td>
+      <td>59.227273</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Nature</td>
+      <td>56.583333</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Neutral</td>
+      <td>66.384615</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Toxic</td>
+      <td>59.550000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Melee</td>
+      <td>69.333333</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Wind</td>
+      <td>58.952381</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Electric</td>
+      <td>62.400000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Earth</td>
+      <td>66.681818</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Mental</td>
+      <td>61.000000</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Fire</td>
+      <td>60.590909</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Crystal</td>
+      <td>60.473684</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+# Vamos criar um loop para pegar a media de cada valor importante
+# Lista dos tipos de valores que queremos pegar a média
+avg_types = ['hp', 'sta', 'spd', 'atk', 'def', 'spatk', 'spdef', 'total', 'height_cm', 'weight_kg']
+```
+
+
+```python
+# Loop para criar a média de cada tipo de valor por tipo de temtem
+for status_type in avg_types:
+    for type_of_temtem in df_avg_temtem_type['Type']:
+        df_avg_temtem_type.loc[df_avg_temtem_type['Type'] == type_of_temtem, f'Avg_{status_type}'] = np.average(df_temtem_com_indice[(df_temtem_com_indice['type 1'] == type_of_temtem) | (df_temtem_com_indice['type 2'] == type_of_temtem)][status_type])
+```
+
+
+```python
+df_avg_temtem_type
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+      <th>Avg_atk</th>
+      <th>Avg_hp</th>
+      <th>Avg_sta</th>
+      <th>Avg_spd</th>
+      <th>Avg_def</th>
+      <th>Avg_spatk</th>
+      <th>Avg_spdef</th>
+      <th>Avg_total</th>
+      <th>Avg_height_cm</th>
+      <th>Avg_weight_kg</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Digital</td>
+      <td>55.380952</td>
+      <td>64.428571</td>
+      <td>54.190476</td>
+      <td>55.000000</td>
+      <td>56.476190</td>
+      <td>55.904762</td>
+      <td>56.666667</td>
+      <td>398.047619</td>
+      <td>116.619048</td>
+      <td>70.333333</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Water</td>
+      <td>59.227273</td>
+      <td>65.681818</td>
+      <td>57.590909</td>
+      <td>61.272727</td>
+      <td>54.954545</td>
+      <td>68.227273</td>
+      <td>57.318182</td>
+      <td>424.272727</td>
+      <td>145.681818</td>
+      <td>87.318182</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Nature</td>
+      <td>56.583333</td>
+      <td>65.083333</td>
+      <td>58.625000</td>
+      <td>54.916667</td>
+      <td>57.041667</td>
+      <td>53.083333</td>
+      <td>62.625000</td>
+      <td>407.958333</td>
+      <td>144.666667</td>
+      <td>273.250000</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Neutral</td>
+      <td>66.384615</td>
+      <td>68.846154</td>
+      <td>59.769231</td>
+      <td>60.692308</td>
+      <td>65.230769</td>
+      <td>59.384615</td>
+      <td>60.923077</td>
+      <td>441.230769</td>
+      <td>156.153846</td>
+      <td>115.076923</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Toxic</td>
+      <td>59.550000</td>
+      <td>67.550000</td>
+      <td>49.600000</td>
+      <td>59.600000</td>
+      <td>58.000000</td>
+      <td>62.600000</td>
+      <td>59.550000</td>
+      <td>416.450000</td>
+      <td>153.300000</td>
+      <td>205.500000</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Melee</td>
+      <td>69.333333</td>
+      <td>66.416667</td>
+      <td>53.583333</td>
+      <td>66.083333</td>
+      <td>62.583333</td>
+      <td>51.875000</td>
+      <td>51.541667</td>
+      <td>421.416667</td>
+      <td>160.750000</td>
+      <td>130.916667</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Wind</td>
+      <td>58.952381</td>
+      <td>61.238095</td>
+      <td>52.095238</td>
+      <td>66.095238</td>
+      <td>57.809524</td>
+      <td>61.666667</td>
+      <td>64.809524</td>
+      <td>422.666667</td>
+      <td>133.714286</td>
+      <td>55.571429</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Electric</td>
+      <td>62.400000</td>
+      <td>60.000000</td>
+      <td>54.450000</td>
+      <td>64.400000</td>
+      <td>52.550000</td>
+      <td>54.100000</td>
+      <td>57.500000</td>
+      <td>405.400000</td>
+      <td>190.400000</td>
+      <td>412.750000</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Earth</td>
+      <td>66.681818</td>
+      <td>68.681818</td>
+      <td>51.727273</td>
+      <td>57.045455</td>
+      <td>64.545455</td>
+      <td>51.000000</td>
+      <td>49.772727</td>
+      <td>409.454545</td>
+      <td>140.863636</td>
+      <td>106.500000</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Mental</td>
+      <td>61.000000</td>
+      <td>56.000000</td>
+      <td>55.857143</td>
+      <td>63.904762</td>
+      <td>50.619048</td>
+      <td>63.523810</td>
+      <td>62.428571</td>
+      <td>413.333333</td>
+      <td>143.190476</td>
+      <td>67.095238</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Fire</td>
+      <td>60.590909</td>
+      <td>63.136364</td>
+      <td>50.772727</td>
+      <td>57.000000</td>
+      <td>64.863636</td>
+      <td>60.409091</td>
+      <td>55.772727</td>
+      <td>412.545455</td>
+      <td>162.590909</td>
+      <td>353.818182</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Crystal</td>
+      <td>60.473684</td>
+      <td>63.526316</td>
+      <td>49.684211</td>
+      <td>61.052632</td>
+      <td>68.578947</td>
+      <td>58.736842</td>
+      <td>64.157895</td>
+      <td>426.210526</td>
+      <td>169.157895</td>
+      <td>121.736842</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+- Com isso criamos uma tabela com os valores das médias por tipo de temtem
+
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+```
+
+
+```python
+plt.figure(figsize=(10,8))
+sns.barplot(x=df_avg_temtem_type['Type'], y=df_avg_temtem_type['Avg_weight_kg'])
+```
+
+
+
+
+    <AxesSubplot:xlabel='Type', ylabel='Avg_weight_kg'>
+
+
+
+
+    
+![png](Temtem_Infos_files/Temtem_Infos_40_1.png)
+    
+
+
+
+```python
+# Adicionando total de temtem por tipos
+for type_of_temtem in df_avg_temtem_type['Type']:
+    qtd_temtem = len(df_temtem_com_indice[(df_temtem_com_indice['type 1'] == type_of_temtem) | (df_temtem_com_indice['type 2'] == type_of_temtem)])
+    df_avg_temtem_type.loc[df_avg_temtem_type['Type'] == type_of_temtem, 'Total_Count'] = qtd_temtem
+```
+
+
+```python
+df_avg_temtem_type
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+      <th>Avg_atk</th>
+      <th>Avg_hp</th>
+      <th>Avg_sta</th>
+      <th>Avg_spd</th>
+      <th>Avg_def</th>
+      <th>Avg_spatk</th>
+      <th>Avg_spdef</th>
+      <th>Avg_total</th>
+      <th>Avg_height_cm</th>
+      <th>Avg_weight_kg</th>
+      <th>Total_Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Digital</td>
+      <td>55.380952</td>
+      <td>64.428571</td>
+      <td>54.190476</td>
+      <td>55.000000</td>
+      <td>56.476190</td>
+      <td>55.904762</td>
+      <td>56.666667</td>
+      <td>398.047619</td>
+      <td>116.619048</td>
+      <td>70.333333</td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Water</td>
+      <td>59.227273</td>
+      <td>65.681818</td>
+      <td>57.590909</td>
+      <td>61.272727</td>
+      <td>54.954545</td>
+      <td>68.227273</td>
+      <td>57.318182</td>
+      <td>424.272727</td>
+      <td>145.681818</td>
+      <td>87.318182</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Nature</td>
+      <td>56.583333</td>
+      <td>65.083333</td>
+      <td>58.625000</td>
+      <td>54.916667</td>
+      <td>57.041667</td>
+      <td>53.083333</td>
+      <td>62.625000</td>
+      <td>407.958333</td>
+      <td>144.666667</td>
+      <td>273.250000</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Neutral</td>
+      <td>66.384615</td>
+      <td>68.846154</td>
+      <td>59.769231</td>
+      <td>60.692308</td>
+      <td>65.230769</td>
+      <td>59.384615</td>
+      <td>60.923077</td>
+      <td>441.230769</td>
+      <td>156.153846</td>
+      <td>115.076923</td>
+      <td>13.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Toxic</td>
+      <td>59.550000</td>
+      <td>67.550000</td>
+      <td>49.600000</td>
+      <td>59.600000</td>
+      <td>58.000000</td>
+      <td>62.600000</td>
+      <td>59.550000</td>
+      <td>416.450000</td>
+      <td>153.300000</td>
+      <td>205.500000</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>Melee</td>
+      <td>69.333333</td>
+      <td>66.416667</td>
+      <td>53.583333</td>
+      <td>66.083333</td>
+      <td>62.583333</td>
+      <td>51.875000</td>
+      <td>51.541667</td>
+      <td>421.416667</td>
+      <td>160.750000</td>
+      <td>130.916667</td>
+      <td>24.0</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>Wind</td>
+      <td>58.952381</td>
+      <td>61.238095</td>
+      <td>52.095238</td>
+      <td>66.095238</td>
+      <td>57.809524</td>
+      <td>61.666667</td>
+      <td>64.809524</td>
+      <td>422.666667</td>
+      <td>133.714286</td>
+      <td>55.571429</td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Electric</td>
+      <td>62.400000</td>
+      <td>60.000000</td>
+      <td>54.450000</td>
+      <td>64.400000</td>
+      <td>52.550000</td>
+      <td>54.100000</td>
+      <td>57.500000</td>
+      <td>405.400000</td>
+      <td>190.400000</td>
+      <td>412.750000</td>
+      <td>20.0</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Earth</td>
+      <td>66.681818</td>
+      <td>68.681818</td>
+      <td>51.727273</td>
+      <td>57.045455</td>
+      <td>64.545455</td>
+      <td>51.000000</td>
+      <td>49.772727</td>
+      <td>409.454545</td>
+      <td>140.863636</td>
+      <td>106.500000</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Mental</td>
+      <td>61.000000</td>
+      <td>56.000000</td>
+      <td>55.857143</td>
+      <td>63.904762</td>
+      <td>50.619048</td>
+      <td>63.523810</td>
+      <td>62.428571</td>
+      <td>413.333333</td>
+      <td>143.190476</td>
+      <td>67.095238</td>
+      <td>21.0</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>Fire</td>
+      <td>60.590909</td>
+      <td>63.136364</td>
+      <td>50.772727</td>
+      <td>57.000000</td>
+      <td>64.863636</td>
+      <td>60.409091</td>
+      <td>55.772727</td>
+      <td>412.545455</td>
+      <td>162.590909</td>
+      <td>353.818182</td>
+      <td>22.0</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>Crystal</td>
+      <td>60.473684</td>
+      <td>63.526316</td>
+      <td>49.684211</td>
+      <td>61.052632</td>
+      <td>68.578947</td>
+      <td>58.736842</td>
+      <td>64.157895</td>
+      <td>426.210526</td>
+      <td>169.157895</td>
+      <td>121.736842</td>
+      <td>19.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+df_avg_temtem_type.loc[df_avg_temtem_type['Type'] == 'Digital']
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Type</th>
+      <th>Avg_atk</th>
+      <th>Avg_hp</th>
+      <th>Avg_sta</th>
+      <th>Avg_spd</th>
+      <th>Avg_def</th>
+      <th>Avg_spatk</th>
+      <th>Avg_spdef</th>
+      <th>Avg_total</th>
+      <th>Avg_height_cm</th>
+      <th>Avg_weight_kg</th>
+      <th>Total_Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Digital</td>
+      <td>55.380952</td>
+      <td>64.428571</td>
+      <td>54.190476</td>
+      <td>55.0</td>
+      <td>56.47619</td>
+      <td>55.904762</td>
+      <td>56.666667</td>
+      <td>398.047619</td>
+      <td>116.619048</td>
+      <td>70.333333</td>
+      <td>21.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 # Fim das análises por enquanto
